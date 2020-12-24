@@ -1,10 +1,11 @@
 <template>
   <footer>
     <div class="content">
-      Copyright © 2020 <a href="https://github.com/Monster030">Monster030</a>.
-      The code of this site is licensed under the MIT License. This site is not
-      affiliated in any way with Valve Corporation and its affiliates. STEAM is
-      the trademark of Valve Corporation.
+      Copyright © 2020
+      <a href="https://github.com/Monster030">Monster030</a>. The code of this
+      site is licensed under the MIT License. This site is not affiliated in any
+      way with Valve Corporation and its affiliates. STEAM is the trademark of
+      Valve Corporation.
     </div>
   </footer>
 </template>
