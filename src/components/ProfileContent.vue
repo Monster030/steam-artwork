@@ -39,15 +39,8 @@
               <div>
                 <div class="screenshot_showcase_primary_single">
                   <div class="screenshot-showcase-screenshot">
-                    <div style="padding:1px;">
-                      <div
-                        class="main-img"
-                        :style="{
-                          maxWidth: '630px',
-                          height: image.height - 256 + 'px',
-                          backgroundImage: 'url(' + image.src + ')'
-                        }"
-                      ></div>
+                    <div style="border: 1px solid #000000;">
+                      <img style="max-width: 630px;" :src="imgSrc" />
                     </div>
                   </div>
                 </div>
@@ -64,11 +57,7 @@
 export default {
   name: "ProfileContent",
   props: {
-    image: {
-      src: String,
-      height: Number,
-      width: Number
-    }
+    imgSrc: String
   }
 };
 </script>
@@ -134,9 +123,9 @@ export default {
   background-color: rgba(34, 35, 48, 0.93);
   margin-top: 0px;
   overflow: hidden;
-  padding-top: 16px;
+
   background-repeat: no-repeat;
-  padding: 12px 12px 64px 12px;
+  padding: 16px 12px 64px 12px;
   width: 952px;
   margin: 0 auto;
   font-size: 13px;
@@ -159,9 +148,5 @@ export default {
 .pf-left-col {
   width: 652px;
   float: left;
-}
-
-.main-img {
-  background-position: -495px -260px;
 }
 </style>

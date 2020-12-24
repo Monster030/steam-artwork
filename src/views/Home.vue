@@ -5,10 +5,10 @@
     </Header>
     <div class="pf" :style="{ backgroundImage: 'url(' + img.src + ')' }">
       <profile-header
-        :image="img"
+        :img-src="blobAvatar.src"
         @changeUrl="handleChangeUrl($event)"
       ></profile-header>
-      <profile-content :image="img"></profile-content>
+      <profile-content :img-src="blobMain.src"></profile-content>
     </div>
     <Footer />
     <div ref="hiddenimg" style="display:none;"></div>
@@ -35,95 +35,103 @@ export default {
     return {
       img: {
         src:
-          "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/items/280160/198b92abfaae14144fdc924eb4ca432a3499bbd8.jpg",
+          "https://steamcommunity-a.akamaihd.net/public/images/profile/2020/bg_dots.png",
         height: 1200,
         width: 1920
+      },
+      blobMain: {
+        src: "",
+        blob: null
+      },
+      blobAvatar: {
+        src: "",
+        blob: null
       }
     };
+  },
+  mounted() {
+    this.handleChangeUrl(this.img.src);
   },
   methods: {
     handleChangeUrl(e) {
       const self = this;
       if (!e) return;
-      console.log(e);
       if (e.indexOf(".jpg") > -1 || e.indexOf(".png" > -1)) {
         self.img.src = e;
 
-        var i = new Image();
-        i.src = self.img.src;
-        i.style.opacity = "0"; // Hide
-        i.onload = function() {
+        const coordinatesMain = {
+          x: 495,
+          y: 256,
+          w: 630,
+          h: self.img.height - 260
+        };
+
+        const coordinatesAvatar = { x: 499, y: 34, w: 164, h: 164 };
+        var bg = new Image();
+        bg.src =
+          "https://api.allorigins.win/raw?url=" +
+          decodeURIComponent(self.img.src);
+        bg.crossOrigin = "Anonymous";
+        bg.onload = function() {
           self.img.height = this.height;
           self.img.width = this.width;
+          var canvasMain = document.createElement("canvas");
+          var canvasAvatar = document.createElement("canvas");
+
+          canvasMain.width = coordinatesMain.w;
+          canvasMain.height = coordinatesMain.h;
+
+          canvasAvatar.width = coordinatesAvatar.w;
+          canvasAvatar.height = coordinatesAvatar.h;
+
+          var mainContext = canvasMain.getContext("2d");
+          mainContext.drawImage(
+            bg,
+            coordinatesMain.x,
+            coordinatesMain.y,
+            coordinatesMain.w,
+            coordinatesMain.h,
+            0,
+            0,
+            coordinatesMain.w,
+            coordinatesMain.h
+          );
+
+          var avatarContext = canvasAvatar.getContext("2d");
+          avatarContext.drawImage(
+            bg,
+            coordinatesAvatar.x,
+            coordinatesAvatar.y,
+            coordinatesAvatar.w,
+            coordinatesAvatar.h,
+            0,
+            0,
+            coordinatesAvatar.w,
+            coordinatesAvatar.h
+          );
+
+          canvasMain.toBlob(b => {
+            self.blobMain.src = URL.createObjectURL(b);
+            self.blobMain.blob = b;
+          }, "image/png");
+          canvasAvatar.toBlob(b => {
+            self.blobAvatar.src = URL.createObjectURL(b);
+            self.blobAvatar.blob = b;
+          }, "image/png");
         };
       }
     },
     handleDownload() {
-      const self = this;
-      // points = [TLx, TLy, BRx, BRy]
-      // eslint-disable-next-line no-unused-vars
-      const coordinatesMain = {
-        x: 495,
-        y: 260,
-        w: 630,
-        h: self.img.height - 260
-      };
+      alert("You may need to allow multiple file download.");
+      var aMain = document.createElement("a");
+      aMain.download = "main.png";
+      aMain.href = this.blobMain.src;
+      aMain.click();
 
-      const coordinatesAvatar = { x: 493, y: 35, w: 164, h: 164 };
-      var bg = new Image();
-      bg.src =
-        "https://api.allorigins.win/raw?url=" +
-        decodeURIComponent(self.img.src);
-      bg.crossOrigin = "Anonymous";
-      bg.onload = function() {
-        var canvasMain = document.createElement("canvas");
-        var canvasAvatar = document.createElement("canvas");
-
-        canvasMain.width = coordinatesMain.w;
-        canvasMain.height = coordinatesMain.h;
-
-        canvasAvatar.width = coordinatesAvatar.w;
-        canvasAvatar.height = coordinatesAvatar.h;
-
-        var mainContext = canvasMain.getContext("2d");
-        mainContext.drawImage(
-          bg,
-          coordinatesMain.x,
-          coordinatesMain.y,
-          coordinatesMain.w,
-          coordinatesMain.h,
-          0,
-          0,
-          coordinatesMain.w,
-          coordinatesMain.h
-        );
-
-        var avatarContext = canvasAvatar.getContext("2d");
-        avatarContext.drawImage(
-          bg,
-          coordinatesAvatar.x,
-          coordinatesAvatar.y,
-          coordinatesAvatar.w,
-          coordinatesAvatar.h,
-          0,
-          0,
-          coordinatesAvatar.w,
-          coordinatesAvatar.h
-        );
-
-        canvasMain.toBlob(b => {
-          var a = document.createElement("a");
-          a.download = "main.png";
-          a.href = URL.createObjectURL(b);
-          a.click();
-        }, "image/png");
-        canvasAvatar.toBlob(b => {
-          var a = document.createElement("a");
-          a.download = "avatar.png";
-          a.href = URL.createObjectURL(b);
-          a.click();
-        }, "image/png");
-      };
+      var aAvatar = document.createElement("a");
+      aAvatar.download = "avatar.png";
+      aAvatar.href = this.blobAvatar.src;
+      aAvatar.click();
     }
   }
 };
@@ -137,5 +145,6 @@ export default {
   background-repeat: no-repeat;
   position: relative;
   min-width: 950px;
+  background-size: auto;
 }
 </style>

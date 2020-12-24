@@ -14,14 +14,11 @@
           <!--Avatar-->
           <div class="pf-header-avatar">
             <div class="pf-header-avatar-inner">
-              <div
-                :style="{
-                  maxWidth: '164px',
-                  height: '164px',
-                  backgroundImage: 'url(' + image.src + ')',
-                  backgroundPosition: '-493px -35px'
-                }"
-              ></div>
+              <img
+                :src="imgSrc"
+                alt="avatar"
+                style="max-width:164px;height:164px;"
+              />
             </div>
           </div>
 
@@ -83,15 +80,8 @@ export default {
       input: ""
     };
   },
-  mounted() {
-    this.input = this.$props.image.url;
-  },
   props: {
-    image: {
-      src: String,
-      height: Number,
-      width: Number
-    }
+    imgSrc: String
   }
 };
 </script>
