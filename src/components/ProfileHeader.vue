@@ -32,7 +32,7 @@
             </div>
             <div class="pf-header-badge-con"></div>
             <div style="font-size:18px;margin:5px;">
-              <a href="http://www.github.com/">
+              <a href="https://github.com/Monster030/steam-artwork">
                 <svg
                   height="32"
                   viewBox="0 0 16 16"
