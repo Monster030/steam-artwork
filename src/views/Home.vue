@@ -59,14 +59,6 @@ export default {
       if (e.indexOf(".jpg") > -1 || e.indexOf(".png" > -1)) {
         self.img.src = e;
 
-        const coordinatesMain = {
-          x: 495,
-          y: 256,
-          w: 630,
-          h: self.img.height - 260
-        };
-
-        const coordinatesAvatar = { x: 499, y: 34, w: 164, h: 164 };
         var bg = new Image();
         bg.src =
           "https://api.allorigins.win/raw?url=" +
@@ -75,6 +67,16 @@ export default {
         bg.onload = function() {
           self.img.height = this.height;
           self.img.width = this.width;
+
+          const coordinatesMain = {
+            x: 495,
+            y: 256,
+            w: 630,
+            h: self.img.height - 260
+          };
+
+          const coordinatesAvatar = { x: 499, y: 34, w: 164, h: 164 };
+
           var canvasMain = document.createElement("canvas");
           var canvasAvatar = document.createElement("canvas");
 
