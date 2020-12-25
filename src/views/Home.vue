@@ -36,8 +36,8 @@ export default {
       img: {
         src:
           "https://steamcommunity-a.akamaihd.net/public/images/profile/2020/bg_dots.png",
-        height: 1200,
-        width: 1920
+        height: null,
+        width: null
       },
       blobMain: {
         src: "",

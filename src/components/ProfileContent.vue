@@ -40,7 +40,10 @@
                 <div class="screenshot_showcase_primary_single">
                   <div class="screenshot-showcase-screenshot">
                     <div style="border: 1px solid #000000;">
-                      <img style="max-width: 630px;" :src="imgSrc" />
+                      <img
+                        style="max-width: 630px;display:block;"
+                        :src="imgSrc"
+                      />
                     </div>
                   </div>
                 </div>
