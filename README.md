@@ -8,6 +8,7 @@
 
   <p align="center">
     Creating new Steam Feature Artwork
+    <br/>
     <a href="https://artwork2020.m0n5ter.com/">View Demo</a>
     ·
     <a href="https://github.com/Monster030/steam-artwork/issues">Report Bug</a>
@@ -46,15 +47,15 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Screenshot][images/screenshot.png]](https://artwork2020.m0n5ter.com/)
+[![Screenshot](images/screenshot.png)](https://artwork2020.m0n5ter.com/)
 
 In Dec 2020, Steam created a new artwork showcase. This project aim to create the cropped background image in one click.
 
 ### Example output
-* Artwork: (630xheight)
-![Artwork Output][images/main.png]
-* Avatar: (164x164)
-![Avatar Output][images/avatar.png]
+* Artwork: (630xheight)<br/>
+![Artwork Output](images/main.png)
+* Avatar: (164x164)<br/>
+![Avatar Output](images/avatar.png)
 
 ### Built With
 
