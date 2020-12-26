@@ -3,7 +3,12 @@
     <Header>
       <download-button @downloadOnClick="handleDownload"></download-button>
     </Header>
-    <div class="pf" :style="{ backgroundImage: 'url(' + img.src || '' + ')' }">
+    <div
+      class="pf"
+      :style="{
+        backgroundImage: 'url(' + img.src + ')'
+      }"
+    >
       <profile-header
         :img-src="blobAvatar.src"
         @changeUrl="handleChangeUrl($event)"
@@ -34,7 +39,7 @@ export default {
   data: function() {
     return {
       img: {
-        src: null,
+        src: "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=",
         height: null,
         width: null
       },
