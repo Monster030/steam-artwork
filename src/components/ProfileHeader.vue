@@ -62,7 +62,9 @@
                   @keyup.enter="$emit('changeUrl', input)"
                   @submit="e => e.preventDefault()"
                 />
-                <label for="url" class="form__label">Image URL</label>
+                <label for="url" class="form__label"
+                  >Image URL (mp4 and webm are not supported)</label
+                >
               </div>
             </div>
           </div>

@@ -56,7 +56,9 @@ export default {
     handleChangeUrl(e) {
       const self = this;
       if (!e) return;
-      if (e.indexOf(".jpg") > -1 || e.indexOf(".png" > -1)) {
+      console.log(e.indexOf(".jpg") > -1 || e.indexOf(".png") > -1);
+
+      if (e.indexOf(".jpg") > -1 || e.indexOf(".png") > -1) {
         self.img.src = e;
 
         var bg = new Image();
@@ -119,6 +121,8 @@ export default {
             self.blobAvatar.blob = b;
           }, "image/png");
         };
+      } else {
+        alert("Sorry, " + e.split(".").pop() + " is not supported");
       }
     },
     handleDownload() {
