@@ -60,9 +60,7 @@ export default {
         self.img.src = e;
 
         var bg = new Image();
-        bg.src =
-          "https://api.allorigins.win/raw?url=" +
-          decodeURIComponent(self.img.src);
+        bg.src = "https://cors.m0n5ter.com/" + decodeURIComponent(self.img.src);
         bg.crossOrigin = "Anonymous";
         bg.onload = function() {
           self.img.height = this.height;
