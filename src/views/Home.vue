@@ -3,7 +3,15 @@
     <Header>
       <download-button @downloadOnClick="handleDownload"></download-button>
     </Header>
-    <div class="pf" :style="{ backgroundImage: 'url(' + img.src || '' + ')' }">
+    <div
+      class="pf"
+      :style="{
+        backgroundImage:
+          'url(' + img.src == null
+            ? 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='
+            : img.src + ')'
+      }"
+    >
       <profile-header
         :img-src="blobAvatar.src"
         @changeUrl="handleChangeUrl($event)"
