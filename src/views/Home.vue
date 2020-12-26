@@ -72,7 +72,7 @@ export default {
             x: 495,
             y: 256,
             w: 630,
-            h: self.img.height - 260
+            h: self.img.height - 256
           };
 
           const coordinatesAvatar = { x: 499, y: 34, w: 164, h: 164 };
