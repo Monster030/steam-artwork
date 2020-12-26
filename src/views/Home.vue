@@ -3,7 +3,7 @@
     <Header>
       <download-button @downloadOnClick="handleDownload"></download-button>
     </Header>
-    <div class="pf" :style="{ backgroundImage: 'url(' + img.src + ')' }">
+    <div class="pf" :style="{ backgroundImage: 'url(' + img.src || '' + ')' }">
       <profile-header
         :img-src="blobAvatar.src"
         @changeUrl="handleChangeUrl($event)"
@@ -34,8 +34,7 @@ export default {
   data: function() {
     return {
       img: {
-        src:
-          "https://steamcommunity-a.akamaihd.net/public/images/profile/2020/bg_dots.png",
+        src: null,
         height: null,
         width: null
       },
@@ -50,21 +49,26 @@ export default {
     };
   },
   mounted() {
-    this.handleChangeUrl(this.img.src);
+    this.handleChangeUrl(
+      "https://steamcommunity-a.akamaihd.net/public/images/profile/2020/bg_dots.png"
+    );
   },
   methods: {
     handleChangeUrl(e) {
       const self = this;
       if (!e) return;
-      console.log(e.indexOf(".jpg") > -1 || e.indexOf(".png") > -1);
-
       if (e.indexOf(".jpg") > -1 || e.indexOf(".png") > -1) {
-        self.img.src = e;
-
         var bg = new Image();
-        bg.src = "https://cors.m0n5ter.com/" + decodeURIComponent(self.img.src);
+        bg.src = "https://cors.m0n5ter.com/" + decodeURIComponent(e);
         bg.crossOrigin = "Anonymous";
         bg.onload = function() {
+          var background = document.createElement("canvas");
+          var backgroundctx = background.getContext("2d");
+          background.height = this.naturalHeight;
+          background.width = this.naturalWidth;
+          backgroundctx.drawImage(this, 0, 0);
+          self.img.src = background.toDataURL();
+
           self.img.height = this.height;
           self.img.width = this.width;
 
@@ -121,6 +125,10 @@ export default {
             self.blobAvatar.blob = b;
           }, "image/png");
         };
+
+        // bg.onerror = function() {
+        //   alert("Please remove cache on cors.m0n5ter.com/* and try again!");
+        // };
       } else {
         alert("Sorry, " + e.split(".").pop() + " is not supported");
       }
