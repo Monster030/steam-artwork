@@ -39,12 +39,12 @@
               <div>
                 <div class="screenshot_showcase_primary_single">
                   <div class="screenshot-showcase-screenshot">
-                    <div style="border: 1px solid #000000;">
+                    <a download="main.png" :href="imgSrc" class="main-artwork">
                       <img
                         style="max-width: 630px;display:block;"
                         :src="imgSrc"
                       />
-                    </div>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -151,5 +151,14 @@ export default {
 .pf-left-col {
   width: 652px;
   float: left;
+}
+
+.main-artwork {
+  border: 1px solid #000;
+  display: block;
+}
+.main-artwork:hover {
+  border: 1px solid #97c0e3 !important;
+  cursor: pointer;
 }
 </style>
