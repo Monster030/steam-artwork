@@ -43,6 +43,7 @@
                       <img
                         style="max-width: 630px;display:block;"
                         :src="imgSrc"
+                        alt="main artowrk"
                       />
                     </a>
                   </div>
