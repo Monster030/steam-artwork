@@ -1,0 +1,10 @@
+name = "steam-artwork"
+type = "webpack"
+account_id = "4a7004f2bdc04e03cafd5163cd1e9ae3"
+workers_dev = true
+route = ""
+zone_id = ""
+
+[site]
+bucket = "dist"
+entry-point = "workers-site"

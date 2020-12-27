@@ -8,7 +8,8 @@
             <div class="pf-name">Steam Artwork Creator</div>
             <div class="pf-real-name">
               Made with <span style="color:red">&#x2764;</span> by Monster in
-              <img src="@/assets/hk.gif" class="pf-flag" /> Hong Kong
+              <img src="@/assets/hk.gif" class="pf-flag" alt="hong kong" /> Hong
+              Kong
             </div>
           </div>
           <!--Avatar-->
