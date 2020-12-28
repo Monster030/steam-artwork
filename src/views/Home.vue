@@ -25,7 +25,7 @@
       ></profile-content>
     </div>
     <Footer />
-    <Modal v-if="showModal" :progress="progress" />
+    <Modal v-if="showModal" :progress="progress" :log="log" />
   </div>
 </template>
 
@@ -67,7 +67,8 @@ export default {
       },
       progress: 0,
       showModal: false,
-      ffmpeg: null
+      ffmpeg: null,
+      log: ""
     };
   },
   async mounted() {
@@ -77,7 +78,7 @@ export default {
     );
     this.ffmpeg = createFFmpeg({
       log: true,
-      logger: msg => console.log(msg),
+      logger: msg => (self.log = msg.message),
       progress: p => {
         self.progress = p.ratio;
       }

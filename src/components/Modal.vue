@@ -10,6 +10,9 @@
             :style="{ width: Math.round(progress * 100) + '%' }"
           ></div>
         </div>
+        <p>
+          {{ log }}
+        </p>
         <!-- <button
           class="button button-ok"
           :disabled="progress != 1"
@@ -26,7 +29,8 @@
 export default {
   props: {
     header: String,
-    progress: Number
+    progress: Number,
+    log: String
   }
 };
 </script>
@@ -89,7 +93,7 @@ export default {
 }
 .text-wrapper p {
   margin: 10px 0px 20px 0px;
-  font-size: 16px;
+  font-size: 8px;
   color: #b3b3b3;
 }
 .text-wrapper .button {
