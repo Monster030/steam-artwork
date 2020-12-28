@@ -10,10 +10,10 @@
       }"
     >
       <profile-header
-        :img-src="blobAvatar.src"
+        :img-src="avatar.src"
         @changeUrl="handleChangeUrl($event)"
       ></profile-header>
-      <profile-content :img-src="blobMain.src"></profile-content>
+      <profile-content :img-src="mainArtwork.src"></profile-content>
     </div>
     <Footer />
     <div ref="hiddenimg" style="display:none;"></div>
@@ -26,6 +26,9 @@ import ProfileContent from "@/components/ProfileContent.vue";
 import DownloadButton from "@/components/DownloadButton.vue";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
+import { nanoid } from "nanoid";
 
 export default {
   name: "Home",
@@ -43,13 +46,11 @@ export default {
         height: null,
         width: null
       },
-      blobMain: {
-        src: "",
-        blob: null
+      mainArtwork: {
+        src: ""
       },
-      blobAvatar: {
-        src: "",
-        blob: null
+      avatar: {
+        src: ""
       }
     };
   },
@@ -121,34 +122,27 @@ export default {
             coordinatesAvatar.h
           );
 
-          canvasMain.toBlob(b => {
-            self.blobMain.src = URL.createObjectURL(b);
-            self.blobMain.blob = b;
-          }, "image/png");
-          canvasAvatar.toBlob(b => {
-            self.blobAvatar.src = URL.createObjectURL(b);
-            self.blobAvatar.blob = b;
-          }, "image/png");
+          self.mainArtwork.src = canvasMain.toDataURL();
+          self.avatar.src = canvasAvatar.toDataURL();
         };
-
-        // bg.onerror = function() {
-        //   alert("Please remove cache on cors.m0n5ter.com/* and try again!");
-        // };
       } else {
         alert("Sorry, " + e.split(".").pop() + " is not supported");
       }
     },
+    dataUrl2Base64(src) {
+      return src.replace(/^data:image\/(png|jpg);base64,/, "");
+    },
     handleDownload() {
-      alert("You may need to allow multiple file download.");
-      var aMain = document.createElement("a");
-      aMain.download = "main.png";
-      aMain.href = this.blobMain.src;
-      aMain.click();
-
-      var aAvatar = document.createElement("a");
-      aAvatar.download = "avatar.png";
-      aAvatar.href = this.blobAvatar.src;
-      aAvatar.click();
+      var zip = new JSZip();
+      zip.file("avatar.png", this.dataUrl2Base64(this.avatar.src), {
+        base64: true
+      });
+      zip.file("main_artwork.png", this.dataUrl2Base64(this.avatar.src), {
+        base64: true
+      });
+      zip.generateAsync({ type: "blob" }).then(function(content) {
+        saveAs(content, `artwork_${nanoid(8)}.zip`);
+      });
     }
   }
 };
