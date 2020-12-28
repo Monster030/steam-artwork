@@ -12,9 +12,7 @@
       }"
     >
       <div class="pf-animated-bg" v-if="!background.image">
-        <video playsinline autoplay muted loop>
-          <source :src="background.src" />
-        </video>
+        <video playsinline autoplay muted loop :src="background.src" />
       </div>
       <profile-header
         :img-src="avatar.src"
