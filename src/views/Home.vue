@@ -25,12 +25,7 @@
       ></profile-content>
     </div>
     <Footer />
-    <Modal
-      header="Progressing"
-      :progress="progress"
-      v-if="showModal"
-      @close="showModal = false"
-    />
+    <Modal v-if="showModal" :progress="progress" />
   </div>
 </template>
 
@@ -71,13 +66,23 @@ export default {
         src: ""
       },
       progress: 0,
-      showModal: false
+      showModal: false,
+      ffmpeg: null
     };
   },
-  mounted() {
+  async mounted() {
+    var self = this;
     this.handleChangeUrl(
       "https://steamcommunity-a.akamaihd.net/public/images/profile/2020/bg_dots.png"
     );
+    this.ffmpeg = createFFmpeg({
+      log: true,
+      logger: msg => console.log(msg),
+      progress: p => {
+        self.progress = p.ratio;
+      }
+    });
+    await this.ffmpeg.load();
   },
   methods: {
     async handleChangeUrl(e) {
@@ -148,29 +153,25 @@ export default {
           self.avatar.src = canvasAvatar.toDataURL();
         };
       } else if (e.indexOf(".webm") > -1 || e.indexOf(".mp4") > -1) {
-        var ffmpeg = createFFmpeg({
-          log: true,
-          logger: msg => console.log(msg),
-          progress: p => {
-            self.progress = p.ratio;
-          }
-        });
-        await ffmpeg.load();
-
+        if (!self.ffmpeg.isLoaded) return;
         self.showModal = true;
-        ffmpeg.FS("writeFile", "inputFile", await fetchFile(e));
+        self.ffmpeg.FS("writeFile", "inputFile", await fetchFile(e));
         const outputName = "output.gif";
-        await ffmpeg.run(
+        await self.ffmpeg.run(
           "-i",
           "inputFile",
           "-vf",
           "crop=630:ih-256:495:256",
           "-crf",
           "30",
+          "-crf",
+          "30",
           "-y",
           outputName
         );
-        const data = ffmpeg.FS("readFile", outputName);
+        const data = self.ffmpeg.FS("readFile", outputName);
+        self.ffmpeg.FS("unlink", "inputFile");
+        self.ffmpeg.FS("unlink", outputName);
         const blob = new Blob([data.buffer], {
           type: "image/gif"
         });
@@ -180,6 +181,7 @@ export default {
 
         self.mainArtwork.src = URL.createObjectURL(blob);
         self.avatar.src = empty;
+        self.showModal = false;
       } else {
         alert("Sorry, " + e.split(".").pop() + " is not supported");
       }

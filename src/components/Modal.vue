@@ -10,13 +10,13 @@
             :style="{ width: Math.round(progress * 100) + '%' }"
           ></div>
         </div>
-        <button
+        <!-- <button
           class="button button-ok"
           :disabled="progress != 1"
           @click="$emit('close')"
         >
           Okay, Continue
-        </button>
+        </button> -->
       </div>
     </div>
   </div>
