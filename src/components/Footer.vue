@@ -5,7 +5,8 @@
       <a href="https://github.com/Monster030">Monster030</a>. The code of this
       site is licensed under the MIT License. This site is not affiliated in any
       way with Valve Corporation and its affiliates. STEAM is the trademark of
-      Valve Corporation.
+      Valve Corporation. Uses Chrome, Chromium or its forks to have best
+      experience possible. Firefox may not work on animated background.
     </div>
   </footer>
 </template>
@@ -21,7 +22,7 @@ footer {
   background: #171a21;
   background-position: center top;
   min-width: 940px;
-  font-size: 14px;
+  font-size: 12px;
   padding-left: 16px;
   padding-right: 16px;
 }
