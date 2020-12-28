@@ -13,7 +13,16 @@
             </div>
           </div>
           <!--Avatar-->
-          <div class="pf-header-avatar">
+          <div class="pf-header-avatar disable-download" v-if="disableDl">
+            <a class="pf-header-avatar-inner">
+              <img
+                :src="imgSrc"
+                alt="avatar"
+                style="max-width:164px;height:164px;"
+              />
+            </a>
+          </div>
+          <div class="pf-header-avatar" v-else>
             <a
               class="pf-header-avatar-inner"
               :href="imgSrc"
@@ -89,9 +98,7 @@
                   @keyup.enter="$emit('changeUrl', input)"
                   @submit="e => e.preventDefault()"
                 />
-                <label for="url" class="form__label"
-                  >Image URL (mp4 and webm are not supported)</label
-                >
+                <label for="url" class="form__label">Image/Video URL</label>
               </div>
             </div>
           </div>
@@ -110,7 +117,8 @@ export default {
     };
   },
   props: {
-    imgSrc: String
+    imgSrc: String,
+    disableDl: Boolean
   }
 };
 </script>
@@ -187,6 +195,15 @@ export default {
 .pf-header-avatar:hover {
   background: #97c0e3 !important;
   cursor: pointer;
+}
+
+.disable-download:hover {
+  background: linear-gradient(
+    to bottom,
+    rgba(106, 106, 106, 1) 5%,
+    rgba(85, 85, 85, 1) 95%
+  ) !important;
+  cursor: default !important;
 }
 
 .pf-header-avatar-inner {

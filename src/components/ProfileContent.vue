@@ -39,7 +39,11 @@
               <div>
                 <div class="screenshot_showcase_primary_single">
                   <div class="screenshot-showcase-screenshot">
-                    <a download="main.png" :href="imgSrc" class="main-artwork">
+                    <a
+                      :download="gif ? 'main_artwork.gif' : 'main_artwork.png'"
+                      :href="imgSrc"
+                      class="main-artwork"
+                    >
                       <img
                         style="max-width: 630px;display:block;"
                         :src="imgSrc"
@@ -61,7 +65,8 @@
 export default {
   name: "ProfileContent",
   props: {
-    imgSrc: String
+    imgSrc: String,
+    gif: Boolean
   }
 };
 </script>
