@@ -25,7 +25,12 @@
       ></profile-content>
     </div>
     <Footer />
-    <Modal v-if="showModal" :progress="progress" :log="log" />
+    <Modal
+      v-if="showModal"
+      :progress="progress"
+      :log="log"
+      :error="ffmpegError"
+    />
   </div>
 </template>
 
@@ -68,6 +73,7 @@ export default {
       progress: 0,
       showModal: false,
       ffmpeg: null,
+      ffmpegError: "",
       log: ""
     };
   },
@@ -76,14 +82,18 @@ export default {
     this.handleChangeUrl(
       "https://steamcommunity-a.akamaihd.net/public/images/profile/2020/bg_dots.png"
     );
-    this.ffmpeg = createFFmpeg({
-      log: true,
-      logger: msg => (self.log = msg.message),
-      progress: p => {
-        self.progress = p.ratio;
-      }
-    });
-    await this.ffmpeg.load();
+    try {
+      self.ffmpeg = createFFmpeg({
+        log: true,
+        logger: msg => (self.log = msg.message),
+        progress: p => {
+          self.progress = p.ratio;
+        }
+      });
+      await self.ffmpeg.load();
+    } catch (error) {
+      self.ffmpegError = error.message;
+    }
   },
   methods: {
     async handleChangeUrl(e) {
@@ -154,35 +164,48 @@ export default {
           self.avatar.src = canvasAvatar.toDataURL();
         };
       } else if (e.indexOf(".webm") > -1 || e.indexOf(".mp4") > -1) {
-        if (!self.ffmpeg.isLoaded) return;
-        self.showModal = true;
-        self.ffmpeg.FS("writeFile", "inputFile", await fetchFile(e));
-        const outputName = "output.gif";
-        await self.ffmpeg.run(
-          "-i",
-          "inputFile",
-          "-vf",
-          "crop=630:ih-256:495:256",
-          "-crf",
-          "30",
-          "-crf",
-          "30",
-          "-y",
-          outputName
-        );
-        const data = self.ffmpeg.FS("readFile", outputName);
-        self.ffmpeg.FS("unlink", "inputFile");
-        self.ffmpeg.FS("unlink", outputName);
-        const blob = new Blob([data.buffer], {
-          type: "image/gif"
-        });
+        if (!self.ffmpeg.isLoaded() || self.ffmpegError != "") {
+          if (self.ffmpegError == "") self.ffmpegError = "Ffmpeg not loaded";
+          self.showModal = true;
+          setTimeout(() => {
+            self.ffmpegError = "";
+            self.showModal = false;
+          }, 3000);
+          return;
+        }
+        try {
+          self.showModal = true;
+          self.ffmpeg.FS("writeFile", "inputFile", await fetchFile(e));
+          const outputName = "output.gif";
+          await self.ffmpeg.run(
+            "-i",
+            "inputFile",
+            "-vf",
+            "crop=630:ih-256:495:256",
+            "-crf",
+            "30",
+            "-crf",
+            "30",
+            "-y",
+            outputName
+          );
+          const data = self.ffmpeg.FS("readFile", outputName);
+          self.ffmpeg.FS("unlink", "inputFile");
+          self.ffmpeg.FS("unlink", outputName);
+          const blob = new Blob([data.buffer], {
+            type: "image/gif"
+          });
 
-        self.background.src = e;
-        self.background.image = false;
+          self.background.src = e;
+          self.background.image = false;
 
-        self.mainArtwork.src = URL.createObjectURL(blob);
-        self.avatar.src = empty;
-        self.showModal = false;
+          self.mainArtwork.src = URL.createObjectURL(blob);
+          self.avatar.src = empty;
+          self.showModal = false;
+        } catch (e) {
+          self.ffmpegError = e.message;
+          setTimeout(() => (self.showModal = false), 3000);
+        }
       } else {
         alert("Sorry, " + e.split(".").pop() + " is not supported");
       }

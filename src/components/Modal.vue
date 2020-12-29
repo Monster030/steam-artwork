@@ -10,8 +10,11 @@
             :style="{ width: Math.round(progress * 100) + '%' }"
           ></div>
         </div>
-        <p>
+        <p v-if="error == ''">
           {{ log }}
+        </p>
+        <p v-else style="color:#ff0000;font-size:14px;">
+          {{ error }}
         </p>
         <!-- <button
           class="button button-ok"
@@ -30,7 +33,8 @@ export default {
   props: {
     header: String,
     progress: Number,
-    log: String
+    log: String,
+    error: String
   }
 };
 </script>
