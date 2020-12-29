@@ -6,15 +6,21 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "start": "node server.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@ffmpeg/core": "^0.8.5",
     "@ffmpeg/ffmpeg": "^0.9.6",
     "core-js": "^3.6.5",
+    "express": "^4.17.1",
     "file-saver": "^2.0.5",
+    "helmet": "^4.3.1",
     "jszip": "^3.5.0",
     "nanoid": "^3.1.20",
+    "path": "^0.12.7",
+    "request": "^2.88.2",
+    "serve-static": "^1.14.1",
     "vue": "^2.6.11"
   },
   "devDependencies": {

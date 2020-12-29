@@ -102,7 +102,7 @@ export default {
       if (!e) return;
       if (e.indexOf(".jpg") > -1 || e.indexOf(".png") > -1) {
         var bg = new Image();
-        bg.src = "https://cors.m0n5ter.com/" + decodeURIComponent(e);
+        bg.src = "/cors/" + decodeURIComponent(e);
         bg.crossOrigin = "Anonymous";
         bg.onload = function() {
           const coordinatesMain = {
@@ -196,7 +196,7 @@ export default {
             type: "image/gif"
           });
 
-          self.background.src = e;
+          self.background.src = "/cors/" + e;
           self.background.image = false;
 
           self.mainArtwork.src = URL.createObjectURL(blob);
