@@ -6,7 +6,14 @@
       site is licensed under the MIT License. This site is not affiliated in any
       way with Valve Corporation and its affiliates. STEAM is the trademark of
       Valve Corporation. Uses Chrome, Chromium or its forks to have best
-      experience possible. Firefox may not work on animated background.
+      experience possible. Firefox users may need to reset your settings,
+      <a
+        href="https://support.mozilla.org/zh-TW/kb/reset-firefox-easily-fix-most-problems"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        see here </a
+      >.
     </div>
   </footer>
 </template>
