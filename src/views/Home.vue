@@ -77,7 +77,7 @@ export default {
       log: ""
     };
   },
-  mounted() {
+  async mounted() {
     var self = this;
     this.handleChangeUrl(
       "https://steamcommunity-a.akamaihd.net/public/images/profile/2020/bg_dots.png"
@@ -90,6 +90,7 @@ export default {
           self.progress = p.ratio;
         }
       });
+      await self.ffmpeg.load();
     } catch (error) {
       self.ffmpegError = error.message;
     }
@@ -163,7 +164,6 @@ export default {
           self.avatar.src = canvasAvatar.toDataURL();
         };
       } else if (e.indexOf(".webm") > -1 || e.indexOf(".mp4") > -1) {
-        await self.ffmpeg.load();
         if (!self.ffmpeg.isLoaded() || self.ffmpegError != "") {
           if (self.ffmpegError == "") self.ffmpegError = "Ffmpeg not loaded";
           self.showModal = true;
