@@ -40,7 +40,13 @@
                 <div class="screenshot_showcase_primary_single">
                   <div class="screenshot-showcase-screenshot">
                     <a
-                      :download="gif ? 'main_artwork.gif' : 'main_artwork.png'"
+                      :download="
+                        gif
+                          ? 'main_artwork.gif'
+                          : imgSrc.indexOf('data:image/png') > -1
+                          ? 'main_artwork.png'
+                          : 'main_artwork.jpg'
+                      "
                       :href="imgSrc"
                       class="main-artwork"
                     >

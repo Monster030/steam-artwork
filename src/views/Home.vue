@@ -96,72 +96,62 @@ export default {
     }
   },
   methods: {
+    image2DataURL(image, mimeType) {
+      var c = document.createElement("canvas");
+      c.height = image.naturalHeight;
+      c.width = image.naturalWidth;
+      var cctx = c.getContext("2d");
+      cctx.drawImage(image, 0, 0);
+      var url = c.toDataURL(mimeType, 1.0);
+      this.destroyCanvas(c);
+      return url;
+    },
+    imageCrop(image, x, y, w, h) {
+      var c = document.createElement("canvas");
+      c.width = w;
+      c.height = h;
+      var cctx = c.getContext("2d");
+      cctx.drawImage(image, x, y, w, h, 0, 0, w, h);
+      return c;
+    },
+    destroyCanvas(c) {
+      c.height = 0;
+      c.width = 0;
+    },
     async handleChangeUrl(e) {
       e = e.replace(/\s+/, "");
       const self = this;
       if (!e) return;
       if (e.indexOf(".jpg") > -1 || e.indexOf(".png") > -1) {
-        var bg = new Image();
-        bg.src = "/cors/" + decodeURIComponent(e);
-        bg.crossOrigin = "Anonymous";
-        bg.onload = function() {
-          const coordinatesMain = {
-            x: 495,
-            y: 256,
-            w: 630,
-            h: this.naturalHeight - 256
-          };
+        // Get Mimetype
+        var mime = "";
+        if (e.indexOf(".jpg") > -1) mime = "image/jpeg";
+        else mime = "image/png";
 
-          const coordinatesAvatar = {
-            x: 499,
-            y: 34,
-            w: 164,
-            h: 164
-          };
+        var userbg = new Image();
+        userbg.src = "/cors/" + decodeURIComponent(e);
+        userbg.crossOrigin = "Anonymous";
+
+        userbg.onload = function() {
+          // Coords
+          const coordinatesMain = [495, 256, 630, this.naturalHeight - 256];
+          const coordinatesAvatar = [499, 34, 164, 164];
+
           // Background
-          var background = document.createElement("canvas");
-          background.height = this.naturalHeight;
-          background.width = this.naturalWidth;
-          var backgroundCtx = background.getContext("2d");
-          backgroundCtx.drawImage(this, 0, 0);
-          self.background.src = background.toDataURL();
+          self.background.src = self.image2DataURL(this, mime);
           self.background.image = true;
 
           // Main Artwork
-          var canvasMain = document.createElement("canvas");
-          canvasMain.width = coordinatesMain.w;
-          canvasMain.height = coordinatesMain.h;
-          var mainCtx = canvasMain.getContext("2d");
-          mainCtx.drawImage(
-            bg,
-            coordinatesMain.x,
-            coordinatesMain.y,
-            coordinatesMain.w,
-            coordinatesMain.h,
-            0,
-            0,
-            coordinatesMain.w,
-            coordinatesMain.h
-          );
-          self.mainArtwork.src = canvasMain.toDataURL();
+          var mainArtworkCanvas = self.imageCrop(this, ...coordinatesMain);
+          self.mainArtwork.src = mainArtworkCanvas.toDataURL(mime, 1.0);
 
           // Avatar
-          var canvasAvatar = document.createElement("canvas");
-          canvasAvatar.width = coordinatesAvatar.w;
-          canvasAvatar.height = coordinatesAvatar.h;
-          var avatarContext = canvasAvatar.getContext("2d");
-          avatarContext.drawImage(
-            bg,
-            coordinatesAvatar.x,
-            coordinatesAvatar.y,
-            coordinatesAvatar.w,
-            coordinatesAvatar.h,
-            0,
-            0,
-            coordinatesAvatar.w,
-            coordinatesAvatar.h
-          );
-          self.avatar.src = canvasAvatar.toDataURL();
+          var avatarCanvas = self.imageCrop(this, ...coordinatesAvatar);
+          self.avatar.src = avatarCanvas.toDataURL(mime, 1.0);
+
+          // Clean up
+          self.destroyCanvas(mainArtworkCanvas);
+          self.destroyCanvas(avatarCanvas);
         };
       } else if (e.indexOf(".webm") > -1 || e.indexOf(".mp4") > -1) {
         if (!self.ffmpeg.isLoaded() || self.ffmpegError != "") {
@@ -182,8 +172,6 @@ export default {
             "inputFile",
             "-vf",
             "crop=630:ih-256:495:256",
-            "-crf",
-            "30",
             "-crf",
             "30",
             "-y",
