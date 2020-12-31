@@ -209,11 +209,24 @@ export default {
           self.showModal = true;
           self.ffmpeg.FS("writeFile", "inputFile", await fetchFile(e));
           const outputName = "output.gif";
+          /**
+          ffmpeg
+          -i <input.mp4>
+          -filter_complex "crop=630:ih-256:495:256,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse"
+          -y
+          <output.gif>
+           */
+
+          var colors =
+            self.imageCompression == 0 || self.imageCompression == 1000
+              ? 256
+              : Math.max(Math.floor((self.imageCompression / 1000) * 256), 4);
+
           await self.ffmpeg.run(
             "-i",
             "inputFile",
             "-vf",
-            "crop=630:ih-256:495:256",
+            `crop=630:ih-256:495:256,split[s0][s1];[s0]palettegen=${colors}[p];[s1][p]paletteuse`,
             "-crf",
             "30",
             "-y",
