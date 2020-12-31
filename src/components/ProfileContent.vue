@@ -5,7 +5,8 @@
         <div>
           <div class="settings-element">
             <div class="settings-header">
-              image compression level
+              image compression
+              <span class="badge-beta">Beta</span>
             </div>
             <input
               class="compression-slider"
@@ -76,6 +77,18 @@ export default {
 </script>
 
 <style scoped>
+.badge-beta {
+  color: #fff;
+  background-color: #6c757d;
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: super;
+  border-radius: 0.25rem;
+}
 .settings-element {
   margin-bottom: 10px;
 }
