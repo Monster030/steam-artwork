@@ -45,7 +45,21 @@ async function handleEvent(event) {
         bypassCache: true
       };
     }
-    return await getAssetFromKV(event, options);
+    var originalResponse = await getAssetFromKV(event, options);
+    // pass in the original response so we can modify some of it.
+    let response = new Response(originalResponse.body, originalResponse);
+
+    response.headers.set("cross-origin-embedder-policy", "require-corp");
+    response.headers.set("cross-origin-opener-policy", "same-origin");
+    response.headers.set("referrer-policy", "no-referrer");
+    response.headers.set("x-content-type-options", "nosniff");
+    response.headers.set("x-dns-prefetch-control", "off");
+    response.headers.set("x-download-options", "noopen");
+    response.headers.set("x-frame-options", "SAMEORIGIN");
+    response.headers.set("x-permitted-cross-domain-policies", "none");
+    response.headers.set("x-xss-protection", "0");
+
+    return response;
   } catch (e) {
     // if an error is thrown try to serve the asset at 404.html
     if (!DEBUG) {
