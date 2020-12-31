@@ -36,6 +36,10 @@ a:hover {
   color: lightgray;
 }
 
+button:focus {
+  outline: none;
+}
+
 .lazy {
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.3);
