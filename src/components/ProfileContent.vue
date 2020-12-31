@@ -2,35 +2,34 @@
   <div class="pf-content">
     <div class="pf-content-inner">
       <div class="pf-right-col">
-        <div
-          class="lazy"
-          style="background-color:rgba(211, 211, 211, 0.3);height: 30px;width:40%;margin-bottom:5px;"
-        ></div>
-        <div
-          class="lazy"
-          style="background-color:rgba(211, 211, 211, 0.3);height: 20px;width:60%;margin-bottom:20px;"
-        ></div>
-
-        <div
-          class="lazy"
-          style="background-color:rgba(211, 211, 211, 0.3);height: 30px;margin-bottom:25px;"
-        ></div>
-        <div
-          class="lazy"
-          style="background-color:rgba(211, 211, 211, 0.3);height: 30px;margin-bottom:25px;"
-        ></div>
-        <div
-          class="lazy"
-          style="background-color:rgba(211, 211, 211, 0.3);height: 30px;margin-bottom:25px;"
-        ></div>
-        <div
-          class="lazy"
-          style="background-color:rgba(211, 211, 211, 0.3);height: 30px;margin-bottom:25px;"
-        ></div>
-        <div
-          class="lazy"
-          style="background-color:rgba(211, 211, 211, 0.3);height: 30px;margin-bottom:25px;"
-        ></div>
+        <div>
+          <div class="settings-element">
+            <div class="settings-header">
+              image compression level
+            </div>
+            <input
+              class="compression-slider"
+              ref="compression"
+              type="range"
+              :value="1000"
+              min="0"
+              max="1000"
+              step="5"
+              @input="$emit('imgCompress', $event.target.value)"
+            />
+            <div>
+              <span class="compression-footer">
+                size
+              </span>
+              <span class="compression-footer" style="float: right;">
+                quality
+              </span>
+            </div>
+          </div>
+          <button class="apply-button" @click="$emit('applyChanges')">
+            Apply Changes
+          </button>
+        </div>
       </div>
       <div class="pf-left-col">
         <div class="pf-customization-area">
@@ -40,13 +39,7 @@
                 <div class="screenshot_showcase_primary_single">
                   <div class="screenshot-showcase-screenshot">
                     <a
-                      :download="
-                        gif
-                          ? 'main_artwork.gif'
-                          : imgSrc.indexOf('data:image/png') > -1
-                          ? 'main_artwork.png'
-                          : 'main_artwork.jpg'
-                      "
+                      :download="gif ? 'main_artwork.gif' : 'main_artwork.png'"
                       :href="imgSrc"
                       class="main-artwork"
                     >
@@ -78,6 +71,62 @@ export default {
 </script>
 
 <style scoped>
+.settings-element {
+  margin-bottom: 10px;
+}
+.apply-button {
+  background-color: #ff9a9e;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  height: 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.apply-button:hover {
+  background-color: #d38083;
+}
+
+.compression-footer {
+  text-transform: uppercase;
+  color: white;
+}
+
+.compression-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  background-image: linear-gradient(to right, #ff9a9e, #fad0c4);
+  outline: none;
+  padding: 0;
+  margin: 0;
+}
+.compression-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #301d1e;
+  cursor: pointer;
+}
+
+.settings-header {
+  font-size: 14px;
+  margin-bottom: 4px;
+  min-height: 29px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: uppercase;
+  color: #ebebeb;
+}
+
 .pf-customization-area {
   display: block;
 }

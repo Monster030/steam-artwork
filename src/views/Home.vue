@@ -22,6 +22,8 @@
       <profile-content
         :img-src="mainArtwork.src"
         :gif="!background.image"
+        @imgCompress="handleImageCompressionChange($event)"
+        @applyChanges="applyChanges($event)"
       ></profile-content>
     </div>
     <Footer />
@@ -45,6 +47,7 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { nanoid } from "nanoid";
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
+import UPNG from "upng-js";
 
 const empty = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
@@ -61,20 +64,25 @@ export default {
   data: function() {
     return {
       background: {
+        osrc: "",
         src: empty,
         image: true
       },
       mainArtwork: {
-        src: ""
+        src: empty,
+        blob: null
       },
       avatar: {
-        src: ""
+        src: empty,
+        blob: null
       },
       progress: 0,
       showModal: false,
       ffmpeg: null,
       ffmpegError: "",
-      log: ""
+      log: "",
+
+      imageCompression: 0
     };
   },
   async mounted() {
@@ -96,33 +104,70 @@ export default {
     }
   },
   methods: {
+    _isValidHttpUrl(str) {
+      let url;
+      try {
+        url = new URL(str);
+      } catch (_) {
+        return false;
+      }
+      return url.protocol === "http:" || url.protocol === "https:";
+    },
+
+    applyChanges() {
+      this.handleChangeUrl(this.background.osrc);
+    },
+
     image2DataURL(image, mimeType) {
       var c = document.createElement("canvas");
       c.height = image.naturalHeight;
       c.width = image.naturalWidth;
-      var cctx = c.getContext("2d");
-      cctx.drawImage(image, 0, 0);
+      var ctx = c.getContext("2d");
+      ctx.drawImage(image, 0, 0);
       var url = c.toDataURL(mimeType, 1.0);
       this.destroyCanvas(c);
       return url;
     },
+
     imageCrop(image, x, y, w, h) {
       var c = document.createElement("canvas");
       c.width = w;
       c.height = h;
-      var cctx = c.getContext("2d");
-      cctx.drawImage(image, x, y, w, h, 0, 0, w, h);
-      return c;
+      var ctx = c.getContext("2d");
+      ctx.drawImage(image, x, y, w, h, 0, 0, w, h);
+
+      var dta = ctx.getImageData(0, 0, w, h).data;
+      var png = UPNG.encode([dta.buffer], w, h, this.imageCompression);
+
+      var blob = new Blob([new Uint8Array(png)]);
+      var url = window.URL.createObjectURL(blob);
+
+      this.destroyCanvas(c);
+      return { url: url, blob: blob };
     },
+
+    handleImageCompressionChange(e) {
+      e = Number(e);
+      // 0 is lossless compression
+      if (e == 1000) {
+        this.imageCompression = 0;
+      } else {
+        this.imageCompression = Math.max(2, Math.round((510 * e) / 1000));
+      }
+    },
+
     destroyCanvas(c) {
       c.height = 0;
       c.width = 0;
     },
+
     async handleChangeUrl(e) {
       e = e.replace(/\s+/, "");
       const self = this;
-      if (!e) return;
+      if (!e || !self._isValidHttpUrl(e)) return;
       if (e.indexOf(".jpg") > -1 || e.indexOf(".png") > -1) {
+        self.avatar.src = empty;
+        self.mainArtwork.src = empty;
         // Get Mimetype
         var mime = "";
         if (e.indexOf(".jpg") > -1) mime = "image/jpeg";
@@ -139,19 +184,16 @@ export default {
 
           // Background
           self.background.src = self.image2DataURL(this, mime);
+          self.background.osrc = e;
           self.background.image = true;
-
           // Main Artwork
-          var mainArtworkCanvas = self.imageCrop(this, ...coordinatesMain);
-          self.mainArtwork.src = mainArtworkCanvas.toDataURL(mime, 1.0);
-
+          var croppedArtwork = self.imageCrop(this, ...coordinatesMain);
+          self.mainArtwork.src = croppedArtwork.url;
+          self.mainArtwork.blob = croppedArtwork.blob;
           // Avatar
-          var avatarCanvas = self.imageCrop(this, ...coordinatesAvatar);
-          self.avatar.src = avatarCanvas.toDataURL(mime, 1.0);
-
-          // Clean up
-          self.destroyCanvas(mainArtworkCanvas);
-          self.destroyCanvas(avatarCanvas);
+          var croppedAvatar = self.imageCrop(this, ...coordinatesAvatar);
+          self.avatar.src = croppedAvatar.url;
+          self.avatar.blob = croppedAvatar.blob;
         };
       } else if (e.indexOf(".webm") > -1 || e.indexOf(".mp4") > -1) {
         if (!self.ffmpeg.isLoaded() || self.ffmpegError != "") {
@@ -184,14 +226,15 @@ export default {
             type: "image/gif"
           });
 
-          self.background.src = "/cors/" + e;
+          self.background.src = "/cors/" + decodeURIComponent(e);
+          self.background.osrc = e;
           self.background.image = false;
 
           self.mainArtwork.src = URL.createObjectURL(blob);
           self.avatar.src = empty;
           self.showModal = false;
-        } catch (e) {
-          self.ffmpegError = e.message;
+        } catch (err) {
+          self.ffmpegError = err.message;
           setTimeout(() => (self.showModal = false), 3000);
         }
       } else {
@@ -204,10 +247,10 @@ export default {
     handleDownload() {
       if (this.background.image) {
         var zip = new JSZip();
-        zip.file("avatar.png", this.dataUrl2Base64(this.avatar.src), {
+        zip.file("avatar.png", this.avatar.blob, {
           base64: true
         });
-        zip.file("main_artwork.png", this.dataUrl2Base64(this.avatar.src), {
+        zip.file("main_artwork.png", this.mainArtwork.blob, {
           base64: true
         });
         zip.generateAsync({ type: "blob" }).then(function(content) {
