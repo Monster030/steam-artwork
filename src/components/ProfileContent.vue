@@ -11,10 +11,10 @@
               class="compression-slider"
               ref="compression"
               type="range"
-              :value="1000"
               min="0"
               max="1000"
               step="5"
+              v-model="compressionValue"
               @input="$emit('imgCompress', $event.target.value)"
             />
             <div>
@@ -66,6 +66,11 @@ export default {
   props: {
     imgSrc: String,
     gif: Boolean
+  },
+  data: function() {
+    return {
+      compressionValue: 1000
+    };
   }
 };
 </script>
@@ -112,14 +117,13 @@ export default {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #301d1e;
+  background: #814e51;
   cursor: pointer;
 }
 
 .settings-header {
   font-size: 14px;
   margin-bottom: 4px;
-  min-height: 29px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -92,7 +92,6 @@
                   type="input"
                   class="form__field"
                   placeholder="Image URL"
-                  name="name"
                   id="url"
                   v-model="input"
                   @keyup.enter="$emit('changeUrl', input)"
