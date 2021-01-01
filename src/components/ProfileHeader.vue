@@ -94,10 +94,22 @@
                   placeholder="Image URL"
                   id="url"
                   v-model="input"
+                  autocomplete="off"
                   @keyup.enter="$emit('changeUrl', input)"
                   @submit="e => e.preventDefault()"
                 />
                 <label for="url" class="form__label">Image/Video URL</label>
+                <span class="form__submit" @click="$emit('changeUrl', input)">
+                  <svg
+                    fill="#fff"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M8.122 24l-4.122-4 8-8-8-8 4.122-4 11.878 12z" />
+                  </svg>
+                </span>
               </div>
             </div>
           </div>
@@ -275,7 +287,12 @@ export default {
   position: relative;
   padding: 15px 0 0;
   margin-top: 10px;
-  width: 95%;
+  box-sizing: border-box;
+  clear: both;
+  font-size: 1rem;
+  position: relative;
+  text-align: inherit;
+  display: flex;
 }
 
 .form__field {
@@ -289,6 +306,8 @@ export default {
   padding: 7px 0;
   background: transparent;
   transition: border-color 0.2s;
+  padding-right: 2.5rem;
+  display: inline-flex;
 }
 .form__field::placeholder {
   color: transparent;
@@ -329,5 +348,21 @@ export default {
 .form__field:required,
 .form__field:invalid {
   box-shadow: none;
+}
+
+.form__submit {
+  height: 1.5em;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 1.5em;
+  z-index: 99;
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  padding-bottom: 0.4em;
+  cursor: pointer;
+  pointer-events: auto;
 }
 </style>

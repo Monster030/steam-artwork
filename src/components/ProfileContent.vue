@@ -2,35 +2,41 @@
   <div class="pf-content">
     <div class="pf-content-inner">
       <div class="pf-right-col">
-        <div>
-          <div class="settings-element">
-            <div class="settings-header">
-              image compression
-              <span class="badge-beta">Beta</span>
-            </div>
-            <input
-              class="compression-slider"
-              ref="compression"
-              type="range"
-              min="0"
-              max="1000"
-              step="5"
-              v-model="compressionValue"
-              @input="$emit('imgCompress', $event.target.value)"
-            />
-            <div>
-              <span class="compression-footer">
-                size
-              </span>
-              <span class="compression-footer" style="float: right;">
-                quality
-              </span>
+        <div class="settings-group">
+          <div class="settings-header h1">
+            Global Settings
+          </div>
+          <div class="settings-elements">
+            <div class="settings-element">
+              <div class="settings-header">
+                image compression
+                <span class="badge-beta">Beta</span>
+              </div>
+              <input
+                class="compression-slider"
+                ref="compression"
+                type="range"
+                min="0"
+                max="1000"
+                step="5"
+                v-model="compressionValue"
+                @input="$emit('imgCompress', $event.target.value)"
+              />
+              <div>
+                <span class="compression-footer">
+                  size
+                </span>
+                <span class="compression-footer" style="float: right;">
+                  quality
+                </span>
+              </div>
             </div>
           </div>
-          <button class="apply-button" @click="$emit('applyChanges')">
-            Apply Changes
-          </button>
         </div>
+
+        <button class="apply-button" @click="$emit('applyChanges')">
+          Apply Changes
+        </button>
       </div>
       <div class="pf-left-col">
         <div class="pf-customization-area">
@@ -89,9 +95,15 @@ export default {
   vertical-align: super;
   border-radius: 0.25rem;
 }
+
+.settings-elements {
+  padding-left: 10px;
+}
+
 .settings-element {
   margin-bottom: 10px;
 }
+
 .apply-button {
   background-color: #ff9a9e;
   border: none;
@@ -142,6 +154,15 @@ export default {
   white-space: nowrap;
   text-transform: uppercase;
   color: #ebebeb;
+}
+
+.settings-header.h1 {
+  font-size: 18px;
+  line-height: 25px;
+}
+
+.settings-group {
+  padding-bottom: 20px;
 }
 
 .pf-customization-area {
