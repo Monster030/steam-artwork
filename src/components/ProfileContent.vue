@@ -131,7 +131,7 @@ export default {
   width: 100%;
   height: 10px;
   border-radius: 5px;
-  background-image: linear-gradient(to right, #ff9a9e, #fad0c4);
+  background-image: linear-gradient(to right, red, orange, yellow, green);
   outline: none;
   padding: 0;
   margin: 0;
