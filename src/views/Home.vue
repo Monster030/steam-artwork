@@ -134,6 +134,12 @@ export default {
       c.width = w;
       c.height = h;
       var ctx = c.getContext("2d");
+
+      ctx.beginPath();
+      ctx.rect(0, 0, w, h);
+      ctx.fillStyle = "black";
+      ctx.fill(); // fix #4
+
       ctx.drawImage(image, x, y, w, h, 0, 0, w, h);
 
       var dta = ctx.getImageData(0, 0, w, h).data;
