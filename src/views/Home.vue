@@ -87,9 +87,21 @@ export default {
   },
   async mounted() {
     var self = this;
-    this.handleChangeUrl(
-      "https://steamcommunity-a.akamaihd.net/public/images/profile/2020/bg_dots.png"
+
+    self.background.src = "/img/bg_dots.webp";
+    self.background.osrc =
+      "https://steamcommunity-a.akamaihd.net/public/images/profile/2020/bg_dots.png";
+
+    self.mainArtwork.blob = await fetch(
+      "/img/bg_dots_main_artwork.webp"
+    ).then(r => r.blob());
+    self.mainArtwork.src = window.URL.createObjectURL(self.mainArtwork.blob);
+
+    self.avatar.blob = await fetch("/img/bg_dots_avatar.webp").then(r =>
+      r.blob()
     );
+    self.avatar.src = window.URL.createObjectURL(self.avatar.blob);
+
     try {
       self.ffmpeg = createFFmpeg({
         log: true,
@@ -145,7 +157,9 @@ export default {
       var dta = ctx.getImageData(0, 0, w, h).data;
       var png = UPNG.encode([dta.buffer], w, h, this.imageCompression);
 
-      var blob = new Blob([new Uint8Array(png)]);
+      var blob = new Blob([new Uint8Array(png)], {
+        type: "image/png" // prevent image cannot show /w blob obj url
+      });
       var url = window.URL.createObjectURL(blob);
 
       this.destroyCanvas(c);
