@@ -9,7 +9,7 @@
   <p align="center">
     Creating new Steam Feature Artwork
     <br/>
-    <a href="https://artwork2020.m0n5ter.com/">View Demo</a>
+    <a href="https://steam-artwork-web.herokuapp.com/">View Demo</a>
     ·
     <a href="https://github.com/Monster030/steam-artwork/issues">Report Bug</a>
     ·
@@ -78,7 +78,8 @@ In Dec 2020, Steam created a new artwork showcase. This project aim to create th
    ```
 3. Start a local development server
    ```sh
-   yarn serve
+   yarn watch
+   yarn start
    ```
 4. Go to [localhost:8080](http://localhost:8080/)
 
