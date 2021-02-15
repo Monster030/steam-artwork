@@ -3,6 +3,7 @@ const helmet = require("helmet");
 const serveStatic = require("serve-static");
 const path = require("path");
 const request = require("request");
+const rateLimit = require("express-rate-limit");
 const app = express();
 app.use(
   helmet({
@@ -23,7 +24,18 @@ app.use((req, res, next) => {
   next();
 });
 
-app.all(/\/cors\/(.*)/, function(req, res) {
+app.set("trust proxy", 1);
+
+const corsLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 200 // 200 requests
+});
+
+app.get("/ping", function(req, res) {
+  res.send(); // wake herokuapp
+});
+
+app.all(/\/cors\/(.*)/, corsLimiter, function(req, res) {
   var targetURL = req.url.replace("/cors/", "");
   const cdns = [
     "steampowered.com",

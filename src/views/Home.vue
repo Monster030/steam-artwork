@@ -87,6 +87,7 @@ export default {
   },
   async mounted() {
     var self = this;
+    fetch("/ping"); // wake herokuapp
 
     self.background.src = "/img/bg_dots.webp";
     self.background.osrc =
