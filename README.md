@@ -9,7 +9,7 @@
   <p align="center">
     Creating new Steam Feature Artwork
     <br/>
-    <a href="https://steam-artwork-web.herokuapp.com/">View Demo</a>
+    <a href="https://artwork.monstery.net/">View Demo</a>
     ·
     <a href="https://github.com/Monster030/steam-artwork/issues">Report Bug</a>
     ·

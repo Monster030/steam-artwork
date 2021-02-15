@@ -59,8 +59,14 @@
                   </svg>
                 </div>
                 <span style="margin-left:8px;">
-                  You can directly click on the artwork / avatar to download
-                  either one of them.
+                  This project is moved to
+                  <a
+                    href="https://artwork.monstery.net/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    https://artwork.monstery.net/
+                  </a>
                 </span>
               </div>
             </div>

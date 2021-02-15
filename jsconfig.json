@@ -1,4 +1,7 @@
 {
+  "typeAcquisition": {
+    "exclude": [ "dotenv" ]
+  },
   "include": [
     "./src/**/*"
   ]
